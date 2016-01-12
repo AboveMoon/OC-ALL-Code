@@ -25,8 +25,11 @@
     [self.view addSubview:self.greenView];
     [self.view addSubview:self.blueView];
     
-    // 添加约束
-    [self setupLayout];
+    // 添加约束 method 1
+//    [self setupLayout];
+    
+    // method 2
+    [self setupLayoutWithVFL];
 }
 
 #pragma mark - setters & getters
@@ -83,5 +86,13 @@
     [self.view addConstraints:@[redViewBottom,redViewLeft,redViewRight,redViewTop,greenViewCenterY,greenViewHeight,greenViewRight,greenViewWidth,blueViewBottom,blueViewHeight,blueViewLeft,blueViewRight]];
 }
 
+- (void)setupLayoutWithVFL {
+    NSDictionary *views = NSDictionaryOfVariableBindings(self.view, _redView, _greenView, _blueView);
+    NSNumber *margin = @30;
+    NSDictionary *metrics = NSDictionaryOfVariableBindings(margin);
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-margin-[_redView(_greenView)]-margin-[_greenView]-margin-|" options:NSLayoutFormatAlignAllTop|NSLayoutFormatAlignAllBottom metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-margin-[_blueView]-margin-|" options:0 metrics:metrics views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-margin-[_redView(_blueView)]-margin-[_blueView]-margin-|" options:0 metrics:metrics views:views]];
+}
 
 @end
