@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "Masonry.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) UIView *redView;
@@ -29,7 +30,10 @@
 //    [self setupLayout];
     
     // method 2
-    [self setupLayoutWithVFL];
+//    [self setupLayoutWithVFL];
+    
+    // masonry
+    [self setupLayoutWithMasonry];
 }
 
 #pragma mark - setters & getters
@@ -95,4 +99,53 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-margin-[_redView(_blueView)]-margin-[_blueView]-margin-|" options:0 metrics:metrics views:views]];
 }
 
+- (void)setupLayoutWithMasonry {
+    [_redView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view).with.offset(30);
+        make.top.equalTo(self.view).with.offset(30);
+        make.right.equalTo(_greenView.mas_left).with.offset(-30);
+        make.bottom.equalTo(_blueView.mas_top).with.offset(-30);
+    }];
+    
+    [_greenView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.view).with.offset(-30);
+        make.centerY.equalTo(_redView);
+        make.size.equalTo(_redView);
+    }];
+    
+    [_blueView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_redView);
+        make.right.equalTo(_greenView);
+        make.bottom.equalTo(self.view).with.offset(-30);
+        make.height.equalTo(_redView);
+    }];
+}
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
